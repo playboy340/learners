@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gilbert Ronoh – Literature Learning Plans</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ===== RESET & BASE ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #fff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ===== ANIMATED BACKGROUND PARTICLES ===== */
+    #particles-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ===== BACK TO HOME BUTTON ===== */
+    .back-home-wrapper {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+    }
+
+    .back-home-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 50px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: 0.35s ease;
+      animation: slideDown 0.6s ease-out;
+    }
+
+    .back-home-btn:hover {
+      background: rgba(243,156,18,0.2);
+      border-color: #f39c12;
+      transform: translateX(-4px);
+      box-shadow: 0 0 30px rgba(243,156,18,0.15);
+    }
+
+    .back-home-btn .arrow {
+      display: inline-block;
+      transition: 0.3s;
+      font-size: 1.2rem;
+    }
+
+    .back-home-btn:hover .arrow {
+      transform: translateX(-4px);
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== HERO SECTION ===== */
+    .hero {
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 100px 20px 60px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      animation: fadeUp 1s ease-out;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, #f39c12, #e74c3c, #9b59b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: #ccc;
+      max-width: 700px;
+      line-height: 1.7;
+      animation: fadeUp 1s ease-out 0.2s both;
+    }
+
+    .hero .thank-you-box {
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 40px 36px;
+      max-width: 750px;
+      margin: 30px auto 0;
+      animation: fadeUp 1s ease-out 0.4s both;
+    }
+
+    .hero .thank-you-box p {
+      font-size: 1.1rem;
+      color: #ddd;
+      margin-bottom: 6px;
+    }
+
+    .hero .thank-you-box .highlight-text {
+      color: #f39c12;
+      font-weight: 600;
+    }
+
+    /* ===== SECTIONS GENERAL ===== */
+    .section {
+      padding: 80px 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .section-title span {
+      background: linear-gradient(135deg, #f39c12, #e74c3c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-sub {
+      text-align: center;
+      color: #aaa;
+      margin-bottom: 50px;
+      font-size: 1.05rem;
+    }
+
+    /* ===== PLANS / PRICING SECTION ===== */
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+
+    .plan-card {
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 40px 30px;
+      text-align: center;
+      transition: 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .plan-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 5px;
+      background: linear-gradient(90deg, #f39c12, #e74c3c);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: 0.5s ease;
+    }
+
+    .plan-card:hover::before { transform: scaleX(1); }
+
+    .plan-card:hover {
+      transform: translateY(-12px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      border-color: rgba(243,156,18,0.3);
+    }
+
+    .plan-card.featured {
+      border: 2px solid rgba(243,156,18,0.4);
+      background: rgba(243,156,18,0.06);
+    }
+
+    .plan-card .plan-icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+    }
+
+    .plan-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+    }
+
+    .plan-card .price {
+      font-size: 2.6rem;
+      font-weight: 800;
+      color: #f39c12;
+      margin: 16px 0;
+      animation: pricePulse 2s infinite alternate;
+    }
+
+    @keyframes pricePulse {
+      from { text-shadow: 0 0 8px rgba(243,156,18,0.2); }
+      to { text-shadow: 0 0 25px rgba(243,156,18,0.5); }
+    }
+
+    .plan-card .price sub {
+      font-size: 1rem;
+      font-weight: 400;
+      color: #aaa;
+    }
+
+    .plan-card p {
+      color: #bbb;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .plan-card .features {
+      list-style: none;
+      text-align: left;
+      margin: 16px 0 24px;
+      padding: 0;
+    }
+
+    .plan-card .features li {
+      color: #ccc;
+      padding: 6px 0;
+      font-size: 0.92rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .plan-card .features li::before {
+      content: '✓';
+      color: #2ecc71;
+      font-weight: 700;
+    }
+
+    .choose-plan-btn {
+      display: inline-block;
+      padding: 14px 40px;
+      background: linear-gradient(135deg, #f39c12, #e74c3c);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.35s ease;
+      text-decoration: none;
+    }
+
+    .choose-plan-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 30px rgba(231,76,60,0.4);
+    }
+
+    /* ===== CALL TO ACTION (choose plan → redirect) ===== */
+    .cta-redirect {
+      text-align: center;
+      margin-top: 50px;
+      padding: 30px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 16px;
+      border: 1px dashed rgba(255,255,255,0.1);
+      animation: fadeUp 1s ease-out;
+    }
+
+    .cta-redirect p {
+      color: #aaa;
+      font-size: 1rem;
+    }
+
+    .cta-redirect .btn-contact {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 12px 36px;
+      background: rgba(243,156,18,0.15);
+      border: 1px solid rgba(243,156,18,0.3);
+      border-radius: 50px;
+      color: #f39c12;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .cta-redirect .btn-contact:hover {
+      background: rgba(243,156,18,0.25);
+      transform: translateY(-3px);
+    }
+
+    /* ===== CONTACT / REACH OUT SECTION ===== */
+    .contact-section {
+      padding: 80px 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .contact-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin: 30px 0;
+    }
+
+    .contact-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(8px);
+      padding: 18px 32px;
+      border-radius: 60px;
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: 0.35s ease;
+      text-decoration: none;
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .contact-card:hover {
+      background: rgba(243,156,18,0.12);
+      border-color: #f39c12;
+      transform: translateY(-4px) scale(1.03);
+      box-shadow: 0 8px 30px rgba(243,156,18,0.1);
+    }
+
+    .contact-card .contact-icon {
+      font-size: 1.5rem;
+    }
+
+    /* ===== HELP SECTION ===== */
+    .help-section {
+      padding: 60px 20px 80px;
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .help-box {
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px;
+      padding: 40px 36px;
+      text-align: center;
+      animation: fadeUp 0.8s ease-out;
+    }
+
+    .help-box h2 { margin-bottom: 10px; }
+    .help-box p { color: #bbb; margin-bottom: 24px; line-height: 1.7; }
+    .help-box .help-contacts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    /* ===== CONTENT UNLOCK NOTE ===== */
+    .content-locked {
+      padding: 40px 20px;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .content-locked .lock-box {
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px;
+      padding: 40px;
+      animation: fadeUp 0.8s ease-out;
+    }
+
+    .content-locked .lock-icon {
+      font-size: 4rem;
+      margin-bottom: 16px;
+      animation: floatLock 3s ease-in-out infinite;
+    }
+
+    @keyframes floatLock {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .content-locked h3 {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+    }
+
+    .content-locked p {
+      color: #bbb;
+      line-height: 1.7;
+      font-size: 1rem;
+    }
+
+    .content-locked .highlight-gold {
+      color: #f39c12;
+      font-weight: 600;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(12px);
+      padding: 40px 20px 24px;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      position: relative;
+      z-index: 1;
+    }
+
+    footer .copyright {
+      font-size: 1.1rem;
+      font-weight: 500;
+      animation: copyrightAnim 3s infinite alternate;
+    }
+
+    @keyframes copyrightAnim {
+      0% { color: #f39c12; text-shadow: 0 0 6px rgba(243,156,18,0.2); }
+      50% { color: #e74c3c; text-shadow: 0 0 20px rgba(231,76,60,0.6); }
+      100% { color: #9b59b6; text-shadow: 0 0 30px rgba(155,89,182,0.5); }
+    }
+
+    footer .copyright span {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    footer .footer-sub {
+      color: #888;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: 0.7s ease;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .back-home-wrapper { top: 12px; left: 12px; }
+      .back-home-btn { padding: 10px 18px; font-size: 0.85rem; }
+      .hero h1 { font-size: 2rem; }
+      .hero .thank-you-box { padding: 24px 18px; }
+      .hero .thank-you-box p { font-size: 0.95rem; }
+      .section-title { font-size: 1.7rem; }
+      .plan-card { padding: 28px 20px; }
+      .plan-card .price { font-size: 2rem; }
+      .contact-card { padding: 14px 22px; font-size: 0.85rem; }
+      .help-box { padding: 28px 20px; }
+      .content-locked .lock-box { padding: 24px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== PARTICLES CANVAS ===== -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- ===== BACK TO HOME BUTTON ===== -->
+<div class="back-home-wrapper">
+  <a href="index.html" class="back-home-btn" target="_blank">
+    <span class="arrow">←</span> Back to Home
+  </a>
+</div>
+
+<!-- ===== HERO / WELCOME SECTION ===== -->
+<section class="hero">
+  <h1>📖 Welcome to <span>Gilbert Ronoh</span>'s Literature Hub</h1>
+  <div class="thank-you-box">
+    <p>🙏 <strong>Thank you for your interest.</strong></p>
+    <p>Here you will explore <span class="highlight-text">everything you need to learn</span> about novels and short stories.</p>
+    <p style="margin-top: 12px; font-size: 0.95rem;">
+      To interact with the contents present in this page, finish up the purchase by choosing your plan below:
+    </p>
+  </div>
+</section>
+
+<!-- ===== PLANS / PRICING SECTION ===== -->
+<section id="plans" class="section">
+  <h2 class="section-title">Choose Your <span>Learning Plan</span></h2>
+  <p class="section-sub">Select a plan that suits your needs and unlock full access to all study materials</p>
+
+  <div class="plans-grid">
+    <!-- Plan 1: Summarized Guide -->
+    <div class="plan-card" data-plan="summarized">
+      <div class="plan-icon">📝</div>
+      <h3>Summarized Guide</h3>
+      <div class="price">400 <sub>KES</sub></div>
+      <p>Concise, focused summaries of key novels and short stories — perfect for quick revision.</p>
+      <ul class="features">
+        <li>Chapter-by-chapter summaries</li>
+        <li>Key themes &amp; characters overview</li>
+        <li>Important quotes listed</li>
+        <li>PDF download included</li>
+      </ul>
+      <button class="choose-plan-btn" onclick="choosePlan('Summarized Guide', '400 KES')">Choose This Plan</button>
+    </div>
+
+    <!-- Plan 2: Full Guide (Featured) -->
+    <div class="plan-card featured" data-plan="full">
+      <div class="plan-icon">📚</div>
+      <h3>Full Guide</h3>
+      <div class="price">800 <sub>KES</sub></div>
+      <p>The complete package — comprehensive analysis, essay guides, and exam preparation materials.</p>
+      <ul class="features">
+        <li>Everything in Summarized Guide +</li>
+        <li>In-depth thematic analysis</li>
+        <li>Essay questions with model answers</li>
+        <li>Character &amp; symbolism breakdown</li>
+        <li>Practice exams with marking schemes</li>
+        <li>1-month WhatsApp support</li>
+      </ul>
+      <button class="choose-plan-btn" onclick="choosePlan('Full Guide', '800 KES')">Choose This Plan</button>
+    </div>
+  </div>
+
+  <!-- CTA: After choosing a plan, redirect to contact -->
+  <div class="cta-redirect" id="cta-redirect">
+    <p>👇 <strong>After choosing your plan, scroll down to the contact section below</strong> to complete your purchase and receive your materials.</p>
+    <a href="#contact-info" class="btn-contact">📞 Proceed to Contact Section</a>
+  </div>
+</section>
+
+<!-- ===== CONTENT LOCKED NOTICE ===== -->
+<div class="content-locked" id="content-locked">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <h3>Content Locked</h3>
+    <p>
+      <span class="highlight-gold">Finish up the plan</span> and return to this section for you to view the full content.
+    </p>
+    <p style="margin-top: 10px; font-size: 0.9rem; color: #888;">
+      Once your payment is confirmed, you will unlock all study materials.
+      This site is 100% legit (<i style="color: orange;">Gilbert Ronoh</i>).  NO SCAM!, If you are feeling any doubt, You may reach me out on the contact section first before making any purchase.
+      I guarantee safety of your money. 
+    </p>
+  </div>
+</div>
+
+<!-- ===== CONTACT / REACH OUT SECTION ===== -->
+<section id="contact-info" class="contact-section section">
+  <h2 class="section-title">📬 Complete Your <span>Purchase</span></h2>
+  <p class="section-sub">Choose your plan above, then reach out to me via any of the channels below to finish payment and receive your guide</p>
+
+  <div class="contact-grid">
+    <a href="tel:+254712345678" class="contact-card">
+      <span class="contact-icon">📞</span> +254 728 029 944
+    </a>
+    <a href="https://wa.me/254728029944" class="contact-card">
+      <span class="contact-icon">💬</span> WhatsApp
+    </a>
+    <a href="mailto:libertogriezman4@gmail.com" class="contact-card">
+      <span class="contact-icon">✉️</span> libertogriezman4@gmail.com
+    </a>
+    <a href="https://www.facebook.com/profile.php?id=61554318107291" class="contact-card">
+      <span class="contact-icon">📘</span> Facebook
+    </a>
+    <a href="https://x.com/playboy32432" class="contact-card">
+      <span class="contact-icon">🐦</span> Twitter / X
+    </a>
+    <a href="https://www.reddit.com/u/playboy2104/s/bzpN6WRw1o" class="contact-card">
+      <span class="contact-icon">🔴</span> Reddit
+    </a>
+  </div>
+
+  <p style="text-align: center; color: #888; margin-top: 30px; font-size: 0.9rem;">
+    <em>M-Pesa, Airtel Money, or bank transfer accepted. I typically respond within 30 minutes.</em>
+  </p>
+</section>
+
+<!-- ===== HELP SECTION ===== -->
+<section class="help-section">
+  <div class="help-box">
+    <h2>❓ Need Help?</h2>
+    <p>
+      If you encounter any issues with purchasing, accessing content, or if you have any questions about the study materials, don't hesitate to reach out. I'm here to help you succeed.
+    </p>
+    <div class="help-contacts">
+      <a href="tel:+254728029944" class="contact-card" style="background: rgba(231,76,60,0.1); border-color: rgba(231,76,60,0.3);">
+        <span class="contact-icon">📞</span> Call Me
+      </a>
+      <a href="https://wa.me/254728029944" class="contact-card" style="background: rgba(46,204,113,0.1); border-color: rgba(46,204,113,0.3);">
+        <span class="contact-icon">💬</span> WhatsApp
+      </a>
+      <a href="mailto:libertogriezman4@gmail.com" class="contact-card" style="background: rgba(52,152,219,0.1); border-color: rgba(52,152,219,0.3);">
+        <span class="contact-icon">✉️</span> Email
+      </a>
+    </div>
+    <p style="color: #888; margin-top: 20px; font-size: 0.85rem;">
+      ⏱ Response time: Usually within 30 minutes during school hours
+    </p>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p class="copyright">© <span id="year"></span> <span>Gilbert Ronoh</span> — Professional Literature Teacher. All rights reserved.</p>
+  <p class="footer-sub">Empowering students through the power of literature since 2015</p>
+</footer>
+
+<script>
+  // ===== PARTICLES =====
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+
+  class Particle {
+    constructor() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 2.5 + 0.5;
+      this.speedX = (Math.random() - 0.5) * 0.5;
+      this.speedY = (Math.random() - 0.5) * 0.5;
+      this.opacity = Math.random() * 0.5 + 0.2;
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+      if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(243, 156, 18, ${this.opacity})`;
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < 100; i++) particles.push(new Particle());
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    // Draw connections
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 150) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(243, 156, 18, ${0.15 * (1 - dist / 150)})`;
+          ctx.lineWidth = 0.6;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+  window.addEventListener('resize', resizeCanvas);
+
+  // ===== YEAR =====
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ===== SCROLL REVEAL =====
+  const revealElements = document.querySelectorAll('.plan-card, .help-box, .lock-box, .thank-you-box');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+      }
+    });
+  }, { threshold: 0.15 });
+
+  revealElements.forEach(el => {
+    el.classList.add('reveal');
+    observer.observe(el);
+  });
+
+  // ===== CHOOSE PLAN FUNCTION =====
+  function choosePlan(planName, price) {
+    // Create a nice notification / confirmation
+    const existing = document.querySelector('.plan-notification');
+    if (existing) existing.remove();
+
+    const notif = document.createElement('div');
+    notif.className = 'plan-notification';
+    notif.style.cssText = `
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #1a1a3e;
+      border: 2px solid rgba(243,156,18,0.4);
+      border-radius: 20px;
+      padding: 40px 36px;
+      text-align: center;
+      z-index: 2000;
+      max-width: 420px;
+      width: 90%;
+      color: #fff;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+      animation: modalIn 0.3s ease;
+    `;
+    notif.innerHTML = `
+      <div style="font-size: 3rem; margin-bottom: 12px;">🎉</div>
+      <h3 style="margin-bottom: 8px; font-size: 1.4rem;">You Selected: ${planName}</h3>
+      <p style="color: #f39c12; font-size: 1.8rem; font-weight: 800; margin: 12px 0;">${price}</p>
+      <p style="color: #bbb; margin-bottom: 20px; line-height: 1.6;">
+        Great choice! Now <strong style="color: #f39c12;">scroll down to the Contact section</strong> 
+        and reach out to me to complete your purchase.
+      </p>
+      <button onclick="this.closest('.plan-notification').remove(); document.getElementById('contact-info').scrollIntoView({behavior: 'smooth'})" 
+        style="padding: 12px 32px; background: linear-gradient(135deg, #f39c12, #e74c3c); color: #fff; border: none; border-radius: 50px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.3s;">
+        📞 Go to Contact Section
+      </button>
+      <button onclick="this.closest('.plan-notification').remove()" 
+        style="display: block; margin: 14px auto 0; background: none; border: none; color: #888; cursor: pointer; font-size: 0.9rem; text-decoration: underline;">
+        Close
+      </button>
+    `;
+
+    // Add animation keyframes dynamically
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes modalIn {
+        from { opacity: 0; transform: translate(-50%, -50%) scale(0.85); }
+        to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      }
+    `;
+    document.head.appendChild(style);
+
+    document.body.appendChild(notif);
+
+    // Also scroll to contact after a brief delay
+    setTimeout(() => {
+      notif.querySelector('button')?.addEventListener('click', () => {
+        document.getElementById('contact-info').scrollIntoView({ behavior: 'smooth' });
+      });
+    }, 100);
+
+    console.log(`✅ Plan selected: ${planName} - ${price}`);
+  }
+
+  console.log('✅ Gilbert Ronoh – Literature Plans Page loaded successfully.');
+</script>
+
+</body>
+</html>
